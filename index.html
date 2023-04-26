@@ -7,9 +7,14 @@
       body {
         font-family: Arial, sans-serif;
         text-align: center;
+        background-image: url("https://cdn.pixabay.com/photo/2015/06/09/16/12/dice-803609_1280.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
       }
       h1 {
         color: #FF4136;
+        font-size: 4rem;
       }
       button {
         background-color: #008CBA;
@@ -19,38 +24,49 @@
         text-align: center;
         text-decoration: none;
         display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
+        font-size: 1.5rem;
+        margin: 2rem;
         cursor: pointer;
+      }
+      p {
+        font-size: 1.5rem;
+      }
+      input[type="number"] {
+        font-size: 1.5rem;
+        padding: 0.5rem;
       }
     </style>
   </head>
   <body>
     <h1>이석찬의 카지노</h1>
     <p id="message">베팅하세요!</p>
-    <p>현재 잔액: $<span id="balance">100</span></p>
-    <label for="bet">베팅할 금액($1 이상, 현재 잔액 이하)</label>
+    <p>현재 잔액: &#8361;<span id="balance">1,000,000</span></p>
+    <label for="bet">베팅할 금액(&#8361;10만 이상, 현재 잔액 이하)</label>
     <br>
-    <input type="number" id="bet" name="bet" min="1">
+    <input type="number" id="bet" name="bet" min="100000" step="100000">
     <br><br>
     <button onclick="play()">홀</button>
     <button onclick="play()">짝</button>
     <script>
       function play() {
         var bet = parseInt(document.getElementById("bet").value);
-        var balance = parseInt(document.getElementById("balance").textContent);
-        if (isNaN(bet) || bet < 1 || bet > balance) {
+        var balance = parseInt(document.getElementById("balance").textContent.replace(/,/g, ""));
+        if (isNaN(bet) || bet < 100000 || bet > balance) {
           document.getElementById("message").textContent = "잘못된 입력입니다.";
         } else {
           var result = Math.floor(Math.random() * 2);
           if (result == 0) {
             document.getElementById("message").textContent = "축하합니다!";
-            document.getElementById("balance").textContent = balance + bet;
+            document.getElementById("balance").textContent = addCommas(balance + bet);
           } else {
             document.getElementById("message").textContent = "당신은 졌습니다";
-            document.getElementById("balance").textContent = balance - bet;
+            document.getElementById("balance").textContent = addCommas(balance - bet);
           }
         }
+      }
+
+      function addCommas(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
     </script>
   </body>
